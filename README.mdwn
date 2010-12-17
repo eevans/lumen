@@ -1,0 +1,13 @@
+Lumen
+=====
+
+Requirements:
+
+ * Pyparallel (python-parallel on Debian systems).
+ * Pygame (python-pygame on Debian systems).
+
+
+Notes
+------
+ 
+ * Pyparallel requires that the ppdev kernel module be loaded (unload lp!)

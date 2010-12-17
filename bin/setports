@@ -1,0 +1,49 @@
+#!/usr/bin/python
+
+try:
+    from lumen import Player
+except ImportError, excep:
+    # Hack for running in vcs checkouts
+    from os.path import join, abspath, dirname, exists
+    pathname = abspath(join(dirname(__file__), '..'))
+    if exists(join(pathname, 'lumen', '__init__.py')):
+        import sys; sys.path.append(pathname)
+        from lumen.io import ParallelIO
+    else: raise excep
+
+from optparse import OptionParser
+from sys import stderr, exit
+
+parser = OptionParser(usage="Usage: %prog <bit string>")
+parser.add_option("-i",
+                  "--invert",
+                  default=False,
+                  action="store_true",
+                  help="invert bit values (i.e. high=low, low=high).")
+(options, arguments) = parser.parse_args()
+
+if len(arguments) != 1:
+    parser.print_help()
+    exit(1)
+
+bits = arguments[0]
+
+if len(bits) != 8:
+    print >>stderr, "bit string must contain 8 \"bits\""
+    exit(1)
+
+for bit in bits:
+    if not bit in ('0', '1'):
+        print >>stderr, "\"bits\" must be one of \"0\" or \"1\""
+        exit(0)
+
+data = 0
+setbit = options.invert and "0" or "1"
+        
+for (i, value) in enumerate([1, 2, 4, 8, 16, 32, 64, 128]):
+    if bits[i] == setbit:
+        data = data | value
+        
+ParallelIO(init=data)
+    
+# vi:ai sw=4 ts=4 tw=0 et

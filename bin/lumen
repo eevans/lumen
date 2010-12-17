@@ -1,0 +1,56 @@
+#!/usr/bin/python
+
+try:
+    from lumen import Player
+except ImportError, excep:
+    # Hack for running in vcs checkouts
+    from os.path import join, abspath, dirname, exists
+    pathname = abspath(join(dirname(__file__), '..'))
+    if exists(join(pathname, 'lumen', '__init__.py')):
+        import sys; sys.path.append(pathname)
+        from lumen import Player
+    else: raise excep
+
+from optparse import OptionParser
+
+parser = OptionParser(usage="Usage: %prog")
+parser.add_option("-P", "--play", default=None, help="Play a trackmap file.")
+parser.add_option("-T", "--track", default=None, help="Music track")
+parser.add_option("-F", "--fudge", type='int')
+parser.add_option("-R",
+                  "--record",
+                  default=None,
+                  help="Record keystrokes to a trackmap file.")
+parser.add_option("-s",
+                  "--simulated",
+                  default=False,
+                  action="store_true",
+                  help="Play track but don't drive outputs")
+
+(options, arguments) = parser.parse_args()
+
+fudge = 850
+
+if options.fudge:
+    fudge = options.fudge
+
+def bail():
+    parser.print_help()
+    sys.exit(1)
+    
+if not options.track: bail()
+if options.record and options.play: bail()
+if not options.record and not options.play: bail()
+
+# FIXME: hardcoding!!
+bg = '/home/eevans/dev/src/git/lumen/images/house-dark.png'
+bgsize = (1024,363)
+
+if (options.record):
+    Player(options.track, options.record, bg, bgsize).record()
+    
+if (options.play):
+    Player(options.track, options.play, bg, bgsize).play(fudge,
+                                                         options.simulated)
+    
+# vi:ai sw=4 ts=4 tw=0 et
