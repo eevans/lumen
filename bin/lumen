@@ -42,15 +42,10 @@ if not options.track: bail()
 if options.record and options.play: bail()
 if not options.record and not options.play: bail()
 
-# FIXME: hardcoding!!
-bg = '/home/eevans/dev/src/git/lumen/images/house-dark.png'
-bgsize = (1024,363)
-
 if (options.record):
-    Player(options.track, options.record, bg, bgsize).record()
+    Player(options.track, options.record).record()
     
 if (options.play):
-    Player(options.track, options.play, bg, bgsize).play(fudge,
-                                                         options.simulated)
+    Player(options.track, options.play).play(fudge, options.simulated)
     
 # vi:ai sw=4 ts=4 tw=0 et

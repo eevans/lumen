@@ -5,18 +5,21 @@ from time import time
 from io import ParallelIO
 from os.path import abspath, join, dirname
 
+DEFAULT_BG = abspath(join(dirname(__file__), 'images', 'background.png'))
+DEFAULT_BG_SIZE = (1024,546)
+
 class Markers(object):
     ordered_channels = (K_a, K_s, K_d, K_f, K_j, K_k, K_l, K_SEMICOLON)
     # TODO: these channels values need to be configurable
     channels = {}
-    channels[K_a] = (176,24)
-    channels[K_s] = (116,156)
-    channels[K_d] = (556,136)
-    channels[K_f] = (916,196)
-    channels[K_j] = (16,76)
-    channels[K_k] = (276,236)
-    channels[K_l] = (190,70)
-    channels[K_SEMICOLON] = (0,320)
+    channels[K_a] = (273,160)
+    channels[K_s] = (237,285)
+    channels[K_d] = (713,243)
+    channels[K_f] = (889,290)
+    channels[K_j] = (189,216)
+    channels[K_k] = (385,359)
+    channels[K_l] = (357,216)
+    channels[K_SEMICOLON] = (11,492)
     image = pygame.image.load(abspath(join(dirname(__file__),
                                       'images',
                                       'marker.png')))
@@ -48,7 +51,8 @@ class Markers(object):
         self.dirty = False
         
 class Player(object):
-    def __init__(self, track, trackmap, background, bgsize):
+    def __init__(self, track, trackmap, background=DEFAULT_BG,
+                 bgsize=DEFAULT_BG_SIZE):
         pygame.mixer.pre_init(44100)
         pygame.init()
         
